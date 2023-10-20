@@ -8,13 +8,17 @@
 import UIKit
 
 class SecondViewController: UIViewController, UITextFieldDelegate {
+    
     @IBOutlet weak var redSlider: UISlider!
     @IBOutlet weak var greenSlider: UISlider!
     @IBOutlet weak var blueSlider: UISlider!
+    
     @IBOutlet weak var colorView: UIView!
+    
     @IBOutlet weak var redLabel: UILabel!
     @IBOutlet weak var greenLabel: UILabel!
     @IBOutlet weak var blueLabel: UILabel!
+    
     @IBOutlet weak var redTextField: UITextField!
     @IBOutlet weak var greenTextField: UITextField!
     @IBOutlet weak var blueTextField: UITextField!
@@ -26,22 +30,18 @@ class SecondViewController: UIViewController, UITextFieldDelegate {
         super.viewDidLoad()
         setupUI()
         
-        // Установите делегаты для текстовых полей
         redTextField.delegate = self
         greenTextField.delegate = self
         blueTextField.delegate = self
         
-        // Добавьте жест тапа для скрытия клавиатуры при касании вне текстовых полей
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         view.addGestureRecognizer(tapGesture)
         
-        // Создайте тулбар с кнопкой "Done" для клавиатуры
         let keyboardToolbar = UIToolbar()
         keyboardToolbar.sizeToFit()
         let doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(dismissKeyboard))
         keyboardToolbar.items = [doneButton]
         
-        // Установите тулбар как inputAccessoryView для всех текстовых полей
         redTextField.inputAccessoryView = keyboardToolbar
         greenTextField.inputAccessoryView = keyboardToolbar
         blueTextField.inputAccessoryView = keyboardToolbar
@@ -102,22 +102,20 @@ class SecondViewController: UIViewController, UITextFieldDelegate {
         dismiss(animated: true, completion: nil)
     }
     
-    // Метод для скрытия клавиатуры по жесту тапа
     @objc func dismissKeyboard() {
         view.endEditing(true)
     }
     
-    // Метод для валидации и обновления значений при вводе в текстовые поля
     func textFieldDidEndEditing(_ textField: UITextField) {
         guard let text = textField.text, let value = Float(text) else {
-            // Показать UIAlertController в случае некорректного ввода
+   
             showInvalidInputAlert()
-            updateTextFields() // Восстановить предыдущее значение
+            updateTextFields()
             return
         }
         
         if value >= 0.0 && value <= 1.0 {
-            // Значение валидно
+   
             switch textField {
             case redTextField:
                 redSlider.value = value
@@ -131,13 +129,11 @@ class SecondViewController: UIViewController, UITextFieldDelegate {
             updateColor()
             updateLabels()
         } else {
-            // Показать UIAlertController в случае некорректного диапазона
             showInvalidInputAlert()
-            updateTextFields() // Восстановить предыдущее значение
+            updateTextFields()
         }
     }
     
-    // Метод для отображения UIAlertController в случае некорректного ввода
        func showInvalidInputAlert() {
            let alert = UIAlertController(title: "Ошибка", message: "Пожалуйста, введите корректное значение в диапазоне от 0.0 до 1.0", preferredStyle: .alert)
            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
