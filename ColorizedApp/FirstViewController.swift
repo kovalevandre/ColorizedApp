@@ -7,23 +7,29 @@
 
 import UIKit
 
-class FirstViewController: UIViewController {
-
+final class FirstViewController: UIViewController {
+    @IBOutlet weak var colorView: UIView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    @IBAction func settingsButtonTapped(_ sender: UIButton) {
+        performSegue(withIdentifier: "SettingsSegue", sender: self)
     }
-    */
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "SettingsSegue" {
+            if let destinationVC = segue.destination as? SecondViewController {
+                destinationVC.selectedColor = colorView.backgroundColor
+                destinationVC.delegate = self
+            }
+        }
+    }
+}
 
+extension FirstViewController: ColorSelectionDelegate {
+    func didSelectColor(_ color: UIColor) {
+        colorView.backgroundColor = color
+    }
 }
